@@ -20,7 +20,18 @@ A nossa aplicação servidora terá um serviço disponibilizado aos seus cliente
  * Pacote model
 	 * Classe Pessoa
 * Pacote service
-	* Classe BeberAgua
+	* Classe BebeAgua
 	* Classe ServiceBeberAgua
 * Pacote application
 	* Classe Application
+
+## Interface IServiceBeberAgua
+Nesta interface serão definidos os métodos que poderão ser acessados remotamente pelos Clientes (WaterClient). A interface remota é fundamental na implementação dos serviços remotos. Esta interface será uma dependência necessária do lado do cliente. O cliente deve ter um pacote e interface com o mesmo nome definido no lado do servidor (caso contrário teremos mensagens de erro).
+## Classe Pessoa
+Nesta classe será definida um POJO (Plain Old Java Object) que representará uma pessoa (com nome e peso). Esta classe será usada na chamada do serviço remoto e será uma dependência necessária do lado do cliente. Todo objeto que trafega pela rede deve obrigatoriamente implementar Serializable. O cliente deve ter um pacote e classe com o mesmo nome definido no lado do servidor (caso contrário teremos mensagens de erro). 
+## Classe BebeAgua
+Esta classe implementa o cálculo da quantidade de água a ser bebida por uma pessoa. Ela possui um método que recebe uma pessoa e retorna a quantidade de água que a mesma deverá consumir durante o dia. Esta classe será usada pela classe que implementa a chamada de um método remoto. Não é interessante a partir de uma classe que já existe e realiza ações locais, expor diretamente seus serviços (seus métodos). Esta classe será usada internamente na classe ServiceBeberAgua que implementa a interface remota.
+## Classe ServiceBeberAgua
+Esta classe implementa a interface IServiceBeberAgua, ou seja, esta classe dará corpo para o método remoto e abstrato, definido na interface. Este método implementado aqui, fará uso da classe BebeAgua, que realiza de fato o cálculo necessário àqueles que fizerem uso/requisitarem do serviço remoto.
+## Classe Application
+Esta classe ativa o servidor. Ela possui o método main e ao ser chamado, realiza as ações básicas do acionamento dos serviços do RMI fazendo com que o servidor fique rodando, aguardando por requisições de clientes. No método main são realizadas as ações de registro do repositório, criação de um objeto remoto, vínculo do objeto local a um endereço remoto e consequentemente, aguarda as solicitações.
